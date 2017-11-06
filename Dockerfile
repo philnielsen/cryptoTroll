@@ -1,0 +1,16 @@
+FROM golang:latest AS builder
+
+RUN curl -fsSL -o /usr/local/bin/dep https://github.com/golang/dep/releases/download/v0.3.2/dep-linux-amd64 && chmod +x /usr/local/bin/dep
+
+RUN mkdir -p /go/src/github.com/cryptotroll
+WORKDIR /go/src/github.com/cryptotroll
+
+COPY Gopkg.toml Gopkg.lock ./
+# copies the Gopkg.toml and Gopkg.lock to WORKDIR
+
+RUN dep ensure -vendor-only
+
+ADD . .
+RUN go install .
+
+ENTRYPOINT [ "/go/bin/cryptotroll" ]
