@@ -15,22 +15,24 @@ func main() {
 	anaconda.SetConsumerSecret(ConsumerSecret)
 	api = anaconda.NewTwitterApi(Token, TokenSecret)
 
-	timelinePullNoRTsNoReplies, _ := api.GetUserTimeline(url.Values{"screen_name": []string{PersonToCrypto}, "include_rts": []string{"false"}, "exclude_replies": []string{"true"}})
+	timelinePullNoRTsNoReplies, err := api.GetUserTimeline(url.Values{"screen_name": []string{PersonToCrypto}, "include_rts": []string{"false"}, "exclude_replies": []string{"true"}})
+	if err != nil {
+		log.Println("Error while querying twitter API", err)
+		return
+	}
 
 	for _, tweets := range timelinePullNoRTsNoReplies {
-		//fmt.Println(tweets.Id)
 		tweet, err := api.GetTweet(tweets.Id, url.Values{})
 		if err != nil {
 			log.Println("Error while querying twitter API", err)
 			return
 		}
-		replyToTweet(tweet)
-		fmt.Println("replied to" + tweet.FullText)
+		response, err := replyToTweet(tweet)
+		if err == nil {
+			fmt.Println("Replied to following Tweet: " + tweet.User.Name + " " + tweet.FullText)
+			fmt.Println("Response: " + response)
+			return
+		}
 	}
-
-	// searchResult, _ := api.GetSearch("golang", nil)
-	// for _, tweet := range searchResult.Statuses {
-	// 	fmt.Println(tweet.Text)
-	// }
 
 }
