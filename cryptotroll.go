@@ -16,6 +16,10 @@ func main() {
 	api = anaconda.NewTwitterApi(Token, TokenSecret)
 
 	userObj, err := api.GetUsersShow(PersonToCrypto, nil)
+	if err != nil {
+		log.Println("Error while querying twitter API", err)
+		return
+	}
 
 	twitterStream := api.PublicStreamFilter(url.Values{"follow": []string{userObj.IdStr}})
 
@@ -37,26 +41,6 @@ func main() {
 			// pass
 		default:
 			fmt.Printf("unknown type(%T) : %v \n", x, x)
-		}
-	}
-
-	timelinePullNoRTsNoReplies, err := api.GetUserTimeline(url.Values{"screen_name": []string{PersonToCrypto}, "include_rts": []string{"false"}, "exclude_replies": []string{"true"}})
-	if err != nil {
-		log.Println("Error while querying twitter API", err)
-		return
-	}
-
-	for _, tweets := range timelinePullNoRTsNoReplies {
-		tweet, err := api.GetTweet(tweets.Id, url.Values{})
-		if err != nil {
-			log.Println("Error while querying twitter API", err)
-			return
-		}
-		response, err := replyToTweet(tweet)
-		if err == nil {
-			fmt.Println("Replied to following Tweet: " + tweet.User.Name + " " + tweet.FullText)
-			fmt.Println("Response: " + response)
-			return
 		}
 	}
 
