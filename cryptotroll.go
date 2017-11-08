@@ -31,6 +31,8 @@ func main() {
 				fmt.Println("Replied to following Tweet: " + tweet.User.Name + " " + tweet.FullText)
 				fmt.Println("Response: " + response)
 			}
+			//for now return after one reply until I fix nested replies infinite looping #OOPSMYACCOUNTGOTLOCKED
+			return
 		case anaconda.StatusDeletionNotice:
 			// pass
 		default:

@@ -50,8 +50,6 @@ func replyToTweet(tweet anaconda.Tweet) (string, error) {
 			log.Println("Error while posting reply", err)
 			return "ERROR", err
 		}
-		//for now return after one reply until I fix nested replies infinite looping #OOPSMYACCOUNTGOTLOCKED
-		return
 
 		log.Println("Reply posted : ", respTweet.Text)
 	} else if dryRun == true {
