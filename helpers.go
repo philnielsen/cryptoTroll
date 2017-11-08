@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"fmt"
 	"log"
 	"net/url"
 	"strconv"
@@ -49,6 +50,8 @@ func replyToTweet(tweet anaconda.Tweet) (string, error) {
 			log.Println("Error while posting reply", err)
 			return "ERROR", err
 		}
+		//for now return after one reply until I fix nested replies infinite looping #OOPSMYACCOUNTGOTLOCKED
+		return
 
 		log.Println("Reply posted : ", respTweet.Text)
 	} else if dryRun == true {
@@ -58,4 +61,26 @@ func replyToTweet(tweet anaconda.Tweet) (string, error) {
 	}
 	return response, nil
 
+}
+
+func pullTimeline(user anaconda.User) {
+	timelinePullNoRTsNoReplies, err := api.GetUserTimeline(url.Values{"screen_name": []string{PersonToCrypto}, "include_rts": []string{"false"}, "exclude_replies": []string{"true"}})
+	if err != nil {
+		log.Println("Error while querying twitter API", err)
+		return
+	}
+
+	for _, tweets := range timelinePullNoRTsNoReplies {
+		tweet, err := api.GetTweet(tweets.Id, url.Values{})
+		if err != nil {
+			log.Println("Error while querying twitter API", err)
+			return
+		}
+		response, err := replyToTweet(tweet)
+		if err == nil {
+			fmt.Println("Replied to following Tweet: " + tweet.User.Name + " " + tweet.FullText)
+			fmt.Println("Response: " + response)
+			return
+		}
+	}
 }
