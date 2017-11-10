@@ -61,6 +61,7 @@ func replyToTweet(tweet anaconda.Tweet) (string, error) {
 
 }
 
+//this function pulls all tweets from a user that aren't retweets or replies to another tweet
 func pullTimeline(user anaconda.User) {
 	timelinePullNoRTsNoReplies, err := api.GetUserTimeline(url.Values{"screen_name": []string{PersonToCrypto}, "include_rts": []string{"false"}, "exclude_replies": []string{"true"}})
 	if err != nil {
