@@ -1,12 +1,10 @@
-language: go
+sudo: required
 
-os:
-  - linux
-  - osx
+services:
+  - docker
 
-go:
-  - 1.8
-  - 1.9
+before_install:
+  - docker-compose up
 
 script:
   - go test
