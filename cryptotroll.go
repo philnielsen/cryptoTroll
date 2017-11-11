@@ -30,7 +30,7 @@ func main() {
 		x := <-twitterStream.C
 		switch tweet := x.(type) {
 		case anaconda.Tweet:
-			response, err := replyToTweet(tweet)
+			response, err := replyToTweet(tweet, false)
 			if err == nil {
 				fmt.Println("Replied to following Tweet: " + tweet.User.Name + " " + tweet.FullText)
 				fmt.Println("Response: " + response)

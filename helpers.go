@@ -38,9 +38,9 @@ func buildResponseToTweet(tweet anaconda.Tweet) string {
 	return response
 }
 
-func replyToTweet(tweet anaconda.Tweet) (string, error) {
+func replyToTweet(tweet anaconda.Tweet, dryRun bool) (string, error) {
 	response := buildResponseToTweet(tweet)
-	dryRun := false
+	// dryRun := false
 	if response != "" && dryRun != true {
 		v := url.Values{}
 		v.Add("in_reply_to_status_id", strconv.FormatInt(tweet.Id, 10))
@@ -75,7 +75,7 @@ func pullTimeline(user anaconda.User) {
 			log.Println("Error while querying twitter API", err)
 			return
 		}
-		response, err := replyToTweet(tweet)
+		response, err := replyToTweet(tweet, false)
 		if err == nil {
 			fmt.Println("Replied to following Tweet: " + tweet.User.Name + " " + tweet.FullText)
 			fmt.Println("Response: " + response)
