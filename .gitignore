@@ -17,4 +17,4 @@
 vendor/*
 
 #don't show this stuff
-config.go
+local.env

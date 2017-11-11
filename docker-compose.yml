@@ -2,3 +2,5 @@ version: '3'
 services:
   cryptotroll:
     build: .
+    env_file:
+      - local.env
