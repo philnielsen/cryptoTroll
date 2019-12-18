@@ -4,11 +4,20 @@ import (
 	"bytes"
 	"fmt"
 	"log"
+	"math/rand"
 	"net/url"
 	"strconv"
 
 	"github.com/ChimeraCoder/anaconda"
 )
+
+var replies = []string{
+	"*BARK* CRYPTO *BARK*",
+	"Lost coins only make everyone else's coins worth slightly more.  Think of it as a donation to everyone.",
+	"Fact You Need To Know About Cryptocurrency - The first Bitcoin purchase was for pizza.",
+	"Cryptocurrency ATMs are being installed around the world at a rate of nearly 9 per day.",
+	"OK Boomer",
+}
 
 func buildResponseToTweet(tweet anaconda.Tweet) string {
 	var buffer bytes.Buffer
@@ -19,7 +28,7 @@ func buildResponseToTweet(tweet anaconda.Tweet) string {
 		buffer.WriteString("CRYPTO WOULD SOLVE THIS: " + tweet.FullText)
 	} else {
 		log.Println("Tweet too long, respond with *BARK* CRYPTO *BARK*")
-		buffer.WriteString("*BARK* CRYPTO *BARK*")
+		buffer.WriteString(replies[rand.Intn(len(replies))])
 	}
 
 	//Unfortunatly, most tweets won't support this length of troll, might add back in the future.
